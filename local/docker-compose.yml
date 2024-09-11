@@ -1,0 +1,27 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama:/root/.ollama
+    restart: always
+    networks:
+      - naman_ai_network
+  
+  naman_ai_backend:
+    build: ../
+    image: naman_ai_backend:latest
+    container_name: naman_ai_backend
+    env_file: naman_ai/docker.env
+    depends_on:
+      - ollama
+    ports:
+      - "3131:3131"
+    restart: always
+    networks:
+      - naman_ai_network
+
+networks:
+  naman_ai_network:
